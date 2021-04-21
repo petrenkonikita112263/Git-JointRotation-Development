@@ -19,15 +19,25 @@ with open("data/log.txt", "w") as file:
 # At the time only skipPeriods value and column names
 with open("data/log.txt", "a") as file:
     skip_text = f"===== Skipping {data['skipPeriods']} periods =====\n"
-    column_names = f"period\t\t\ttime\t\t\tsmallTheta\t\t\tbigTheta\t\t\tsmallPhi\t\t\tbigPhi\t\t\tenergy\t\t\tenergy/time\t\t\t{data['variable']}"
+    column_names = f"period\t\t\ttime\t\t\tsmallTheta" \
+                   f"\t\t\tbigTheta\t\t\tsmallPhi\t\t\tbigPhi" \
+                   f"\t\t\tenergy\t\t\tenergy/time\t\t\t{data['variable']}"
     skip_text += column_names
     file.write(skip_text)
 
 # Save info to two separated txt files
 with open("data/pBody.txt", "w") as file:
-    column_names = "frequency\t\t\tamplitude\t\t\tenergy/time\t\t\tmaxBigTheta\t\t\tminBigTheta\t\t\taverageBigTheta\t\t\tperiodTheta(before)\t\t\tperiodTheta(after)\t\t\tvelocityBigPhi\t\t\tphaseBigPhi\t\t\tmode\n"
+    column_names = "frequency\t\t\tamplitude\t\t\tenergy/time" \
+                   "\t\t\tmaxBigTheta\t\t\tminBigTheta\t\t\t" \
+                   "averageBigTheta\t\t\tperiodTheta(before)" \
+                   "\t\t\tperiodTheta(after)\t\t\tvelocityBigPhi" \
+                   "\t\t\tphaseBigPhi\t\t\tmode\n"
     file.write(column_names)
 
 with open("data/mMoment.txt", "w") as file:
-    column_names = "frequency\t\t\tamplitude\t\t\tenergy/time\t\t\tmaxSmallTheta\t\t\tminSmallTheta\t\t\taverageSmallTheta\t\t\tperiodTheta(before)\t\t\tperiodTheta(after)\t\t\tvelocitySmallPhi\t\t\tphaseSmallPhi\t\t\tmode\n"
+    column_names = "frequency\t\t\tamplitude\t\t\tenergy/time" \
+                   "\t\t\tmaxSmallTheta\t\t\tminSmallTheta\t\t\t" \
+                   "averageSmallTheta\t\t\tperiodTheta(before)" \
+                   "\t\t\tperiodTheta(after)\t\t\tvelocitySmallPhi" \
+                   "\t\t\tphaseSmallPhi\t\t\tmode\n"
     file.write(column_names)
