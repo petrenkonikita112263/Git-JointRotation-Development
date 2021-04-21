@@ -26,18 +26,16 @@ with open("data/log.txt", "a") as file:
     file.write(skip_text)
 
 # Save info to two separated txt files
-with open("data/pBody.txt", "w") as file:
-    column_names = "frequency\t\t\tamplitude\t\t\tenergy/time" \
-                   "\t\t\tmaxBigTheta\t\t\tminBigTheta\t\t\t" \
-                   "averageBigTheta\t\t\tperiodTheta(before)" \
-                   "\t\t\tperiodTheta(after)\t\t\tvelocityBigPhi" \
-                   "\t\t\tphaseBigPhi\t\t\tmode\n"
-    file.write(column_names)
-
-with open("data/mMoment.txt", "w") as file:
-    column_names = "frequency\t\t\tamplitude\t\t\tenergy/time" \
-                   "\t\t\tmaxSmallTheta\t\t\tminSmallTheta\t\t\t" \
-                   "averageSmallTheta\t\t\tperiodTheta(before)" \
-                   "\t\t\tperiodTheta(after)\t\t\tvelocitySmallPhi" \
-                   "\t\t\tphaseSmallPhi\t\t\tmode\n"
-    file.write(column_names)
+with open("data/pBody.txt", "w") as p_file, open("data/mMoment.txt", "w") as m_file:
+    p_column_names = "frequency\t\t\tamplitude\t\t\tenergy/time" \
+                     "\t\t\tmaxBigTheta\t\t\tminBigTheta\t\t\t" \
+                     "averageBigTheta\t\t\tperiodTheta(before)" \
+                     "\t\t\tperiodTheta(after)\t\t\tvelocityBigPhi" \
+                     "\t\t\tphaseBigPhi\t\t\tmode\n"
+    m_column_names = "frequency\t\t\tamplitude\t\t\tenergy/time" \
+                     "\t\t\tmaxSmallTheta\t\t\tminSmallTheta\t\t\t" \
+                     "averageSmallTheta\t\t\tperiodTheta(before)" \
+                     "\t\t\tperiodTheta(after)\t\t\tvelocitySmallPhi" \
+                     "\t\t\tphaseSmallPhi\t\t\tmode\n"
+    p_file.write(p_column_names)
+    m_file.write(m_column_names)
