@@ -1,0 +1,1 @@
+frequency			amplitude			energy/time			maxBigTheta			minBigTheta			averageBigTheta			periodTheta(before)			periodTheta(after)			velocityBigPhi			phaseBigPhi			mode
