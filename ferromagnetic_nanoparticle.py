@@ -4,23 +4,31 @@ GAMMA = 1.76 * 10 ** 7
 class FerromagneticNanoparticle:
 
     def __init__(self, input_data):
+        self.amplitude = float(input_data["amplitude"])
+        self.omega = float(input_data["frequency"])
+        self.period = int(input_data["numberOfPeriods"])
+        self.max_period = int(input_data["maxNumberOfPeriods"])
+        self.extremus = int(input_data["numberOfExtremums"])
+        self.skip_period = int(input_data["skipPeriods"])
+        self.print_step = float(input_data["printStep"])
+        self.print_period = int(input_data["printLastNperiods"])
+        self.time_step = int(input_data["timeStep"])
+        self.diff = float(input_data["acceptableDiff"])
+        self.alpha = float(input_data["alpha"])
         self.magnetization = float(input_data["magnetization"])
         self.viscosity = float(input_data["viscosity"])
-        self.alpha = float(input_data["alpha"])
-        self.beta = 0.0
-        self.amplitude = float(input_data["amplitude"])
-        self.omega = 0.0
-        self.hz = 0.0
-        self.alpha_1 = 0.0
-        self.beta_1 = 0.0
-        self.dt = float(input_data["numberOfPeriods"]) / float(input_data["timeStep"])
-        self.time = float(input_data["printStep"]) * float(input_data["numberOfPeriods"]) / float(input_data["timeStep"])
-        self.tau_1 = 0.0
-        self.tau_2 = 0.0
         self.small_theta = float(input_data["smallTheta"])
         self.small_phi = float(input_data["smallPhi"])
         self.big_theta = float(input_data["bigTheta"])
         self.big_phi = float(input_data["bigPhi"])
+        self.rho = float(input_data["hySign"])
+        self.output_precession = int(input_data["outputPrecision"])
+        self.beta = 0.0
+        self.hz = 0.0
+        self.alpha_1 = 0.0
+        self.beta_1 = 0.0
+        self.tau_1 = 0.0
+        self.tau_2 = 0.0
         self.energy = 0.0
         self.f_small_theta = 0.0
         self.f_small_phi = 0.0
@@ -31,7 +39,6 @@ class FerromagneticNanoparticle:
         self.d_big_theta = 0.0
         self.d_big_phi = 0.0
         self.d_energy = 0.0
-        self.rho = float(input_data["hySign"])
 
     def calc_parameters(self):
         self.beta = (self.alpha * self.magnetization) / (6 * GAMMA * self.viscosity)
@@ -39,6 +46,9 @@ class FerromagneticNanoparticle:
         self.beta_1 = 1 + self.beta
         self.tau_1 = 1 / (1 + self.alpha_1 ** 2)
         self.tau_2 = self.beta * self.beta_1 / self.alpha
+
+# self.dt = float(input_data["numberOfPeriods"]) / float(input_data["timeStep"])
+#         self.time = float(input_data["printStep"]) * float(input_data["numberOfPeriods"]) / float(input_data["timeStep"])
 
 # # Set default degree value
 # a_teta = np.deg2rad(np.pi / 3)
