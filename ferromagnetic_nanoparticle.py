@@ -1,3 +1,5 @@
+import numpy as np
+
 GAMMA = 1.76 * 10 ** 7
 
 
@@ -7,9 +9,9 @@ class FerromagneticNanoparticle:
         self.amplitude = float(input_data["amplitude"])
         self.omega = float(input_data["frequency"])
         self.period = int(input_data["numberOfPeriods"])
-        self.max_period = int(input_data["maxNumberOfPeriods"])
+        self.max_period = float(input_data["maxNumberOfPeriods"])
         self.extremus = int(input_data["numberOfExtremums"])
-        self.skip_period = int(input_data["skipPeriods"])
+        self.skip_period = float(input_data["skipPeriods"])
         self.print_step = float(input_data["printStep"])
         self.print_period = int(input_data["printLastNperiods"])
         self.time_step = int(input_data["timeStep"])
@@ -47,25 +49,31 @@ class FerromagneticNanoparticle:
         self.tau_1 = 1 / (1 + self.alpha_1 ** 2)
         self.tau_2 = self.beta * self.beta_1 / self.alpha
 
-# self.dt = float(input_data["numberOfPeriods"]) / float(input_data["timeStep"])
-#         self.time = float(input_data["printStep"]) * float(input_data["numberOfPeriods"]) / float(input_data["timeStep"])
+    def calc_time_parameters(self):
+        time = self.print_step * self.period / self.time_step
+        dt = self.period / self.time_step
+        return time, dt
 
-# # Set default degree value
-# a_teta = np.deg2rad(np.pi / 3)
-# a_varteta = np.deg2rad(2 * np.pi / 3)
-# a_varfi = np.deg2rad(np.pi / 4)
-# a_fi = np.deg2rad(np.pi / 6)
-#
-# print(a_teta, a_fi, a_varfi, a_varteta)
-#
-# # Initial value for the main four axises
-# teta_0 = float(config_data["smallTheta"])
-# fi_0 = float(config_data["smallPhi"])
-# varfi_0 = float(config_data["bigPhi"])
-# varteta_0 = float(config_data["bigTheta"])
-#
-# print(teta_0, fi_0, varfi_0, varteta_0)
-#
+    def get_hx(self, t):
+        return self.amplitude * np.cos(np.deg2rad(self.omega * t))
+
+    def get_hy(self, t):
+        return self.rho * self.amplitude * np.sin(np.deg2rad(self.omega * t))
+
+    def get_hz(self, t):
+        return self.amplitude * np.cos(np.deg2rad(self.omega * t))
+
+    def calc_main_func(self, t):
+        f = np.cos(np.deg2rad(self.small_theta)) * np.sin(np.deg2rad(self.big_theta)) + \
+            np.cos(np.deg2rad(self.small_phi - self.big_phi)) * np.sin(np.deg2rad(self.big_theta)) * \
+            np.sin(np.deg2rad(self.small_theta))
+        c_1 = f * np.cos(np.deg2rad(self.small_phi - self.big_phi)) * np.sin(np.deg2rad(self.big_theta))
+        c_2 = f * np.sin(np.deg2rad(self.small_phi - self.big_phi)) * np.sin(np.deg2rad(self.big_theta))
+        h_1 = self.get_hx(t) * np.cos(np.deg2rad(self.small_phi)) + self.get_hy(t) * \
+              np.sin(np.deg2rad(self.small_phi))
+        h_2 = self.get_hx(t) * np.sin(np.deg2rad(self.small_phi)) - self.get_hy(t) * \
+              np.cos(np.deg2rad(self.small_phi))
+
 # # Calculate anpther additional values
 # hx = h_0 * np.cos(np.deg2rad(omega))
 # hy = rho * h_0 * np.sin(np.deg2rad(omega))
