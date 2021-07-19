@@ -64,36 +64,43 @@ class FerromagneticNanoparticle:
         return self.amplitude * np.cos(np.deg2rad(self.omega * t))
 
     def calc_main_func(self, t):
-        f = np.cos(np.deg2rad(self.small_theta)) * np.sin(np.deg2rad(self.big_theta)) + \
-            np.cos(np.deg2rad(self.small_phi - self.big_phi)) * np.sin(np.deg2rad(self.big_theta)) * \
-            np.sin(np.deg2rad(self.small_theta))
-        c_1 = f * np.cos(np.deg2rad(self.small_phi - self.big_phi)) * np.sin(np.deg2rad(self.big_theta))
-        c_2 = f * np.sin(np.deg2rad(self.small_phi - self.big_phi)) * np.sin(np.deg2rad(self.big_theta))
-        h_1 = self.get_hx(t) * np.cos(np.deg2rad(self.small_phi)) + self.get_hy(t) * \
-              np.sin(np.deg2rad(self.small_phi))
-        h_2 = self.get_hx(t) * np.sin(np.deg2rad(self.small_phi)) - self.get_hy(t) * \
-              np.cos(np.deg2rad(self.small_phi))
+        cos_small_theta = np.cos(np.deg2rad(self.small_theta))
+        cos_big_theta = np.cos(np.deg2rad(self.big_theta))
+        cos_small_phi = np.cos(np.deg2rad(self.small_phi))
+        cos_big_phi = np.cos(np.deg2rad(self.big_phi))
+        sin_small_theta = np.sin(np.deg2rad(self.small_theta))
+        sin_big_theta = np.sin(np.deg2rad(self.big_theta))
+        sin_small_phi = np.cos(np.deg2rad(self.small_phi))
+        sin_big_phi = np.cos(np.deg2rad(self.big_phi))
 
-# # Calculate anpther additional values
-# hx = h_0 * np.cos(np.deg2rad(omega))
-# hy = rho * h_0 * np.sin(np.deg2rad(omega))
-# hz = np.cos(np.deg2rad(omega))
-# F = np.cos(a_varteta) * np.cos(a_teta) + np.cos(a_fi - a_varfi) * np.sin(a_varteta) * np.sin(a_teta)
-# f1 = -(F * np.sin(a_varteta) * np.sin(a_fi - a_varfi) + (1 + beta) *
-#        (hx * np.sin(a_fi) - hy * np.cos(a_fi)))
-# f2 = (np.cos(a_teta) * (F * np.sin(a_varteta) * np.cos(a_fi - a_varfi) + (1 + beta) *
-#                         (hy * np.sin(a_fi) + hx * np.cos(a_fi))) -
-#       np.sin(a_teta) * ((1 + beta) * hz + F * np.cos(a_varteta)))
-#
-# print(hx, hy, hz, F, f1, f2)
-#
-# wx = (((1 + beta) ** -1) * (np.cos(a_teta) * np.cos(a_fi) * teta_0 -
-#                             np.sin(a_teta) * np.sin(a_fi) * fi_0) +
-#       np.sin(a_teta) * np.sin(a_fi) * hz - np.cos(a_teta) * hy)
-# wy = (((1 + beta) ** -1) * (np.cos(a_teta) * np.sin(a_fi) * teta_0 +
-#                             np.sin(a_teta) * np.cos(a_fi) * fi_0) -
-#       np.sin(a_teta) * np.cos(a_fi) * hz + np.cos(a_teta) * hx)
-# wz = (-np.sin(a_teta)) * (((1 + beta) ** -1) * teta_0 -
-#                           np.cos(a_fi) * hy + np.sin(a_fi) * hx)
-#
-# print(wx, wy, wz)
+        f = cos_small_theta * cos_big_theta + \
+            np.cos(np.deg2rad(self.small_phi - self.big_phi)) * sin_big_theta * sin_small_theta
+        c_1 = f * np.cos(np.deg2rad(self.small_phi - self.big_phi)) * sin_big_theta
+        c_2 = f * np.sin(np.deg2rad(self.small_phi - self.big_phi)) * sin_big_theta
+        h_1 = self.get_hx(t) * cos_small_phi + self.get_hy(t) * sin_small_phi
+        h_2 = self.get_hx(t) * sin_small_phi - self.get_hy(t) * cos_small_phi
+        f_1 = - (c_2 + self.beta_1 * h_2)
+        f_2 = cos_small_theta * (c_1 + self.beta_1 * h_1) - \
+              (f * cos_big_theta + self.beta_1 * self.get_hz(t)) * sin_small_theta
+
+        self.f_small_theta = self.tau_1 * (f_1 + self.alpha_1 * f_2)
+        self.f_small_phi = self.tau_1 * (self.alpha_1 * f_1 - f_2) / sin_small_theta
+
+        print(f"Values of small: theta - {self.f_small_theta}, phi - {self.f_small_phi}")
+
+        w_x = (self.f_small_theta * cos_small_theta * cos_small_phi -
+               self.f_small_phi * sin_small_theta * sin_small_phi) / self.beta_1 + \
+              self.get_hz(t) * sin_small_theta * sin_small_phi - self.get_hy(t) * cos_small_theta
+
+        w_y = (self.f_small_theta * cos_small_theta * sin_small_phi +
+               self.f_small_phi * sin_small_theta * cos_small_phi) / self.beta_1 + \
+              self.get_hx(t) * cos_small_theta - self.get_hz(t) * sin_small_theta * cos_small_phi
+
+        w_z = - (self.f_small_theta / self.beta_1 + h_2) * sin_small_theta
+
+        print(w_x, w_y, w_z)
+
+        self.f_big_theta = self.tau_2 * (w_y * cos_big_phi - w_x * sin_big_phi)
+        self.f_big_phi = self.tau_2 * (w_z - cos_big_theta * (w_x * cos_big_phi + w_y * sin_big_phi) / sin_big_theta)
+
+        print(f"Values of big: theta - {self.f_big_theta}, phi - {self.f_big_phi}")
