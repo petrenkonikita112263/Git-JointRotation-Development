@@ -104,3 +104,34 @@ class FerromagneticNanoparticle:
         self.f_big_phi = self.tau_2 * (w_z - cos_big_theta * (w_x * cos_big_phi + w_y * sin_big_phi) / sin_big_theta)
 
         print(f"Values of big: theta - {self.f_big_theta}, phi - {self.f_big_phi}")
+
+    def cacl_energy(self, t):
+        cos_small_theta = np.cos(np.deg2rad(self.small_theta))
+        cos_big_theta = np.cos(np.deg2rad(self.big_theta))
+        cos_small_phi = np.cos(np.deg2rad(self.small_phi))
+        sin_small_theta = np.sin(np.deg2rad(self.small_theta))
+        sin_big_theta = np.sin(np.deg2rad(self.big_theta))
+        sin_small_phi = np.cos(np.deg2rad(self.small_phi))
+
+        f = cos_small_theta * cos_big_theta + \
+            np.cos(np.deg2rad(self.small_phi - self.big_phi)) * sin_big_theta * sin_small_theta
+        h_1 = self.get_hx(t) * cos_small_phi + self.get_hy(t) * sin_small_phi
+        h_2 = self.get_hx(t) * sin_small_phi - self.get_hy(t) * cos_small_phi
+        h_3 = self.get_hz(t)
+        c_1 = f * np.cos(np.deg2rad(self.small_phi - self.big_phi)) * sin_big_theta
+        c_2 = f * np.sin(np.deg2rad(self.small_phi - self.big_phi)) * sin_big_theta
+        c_3 = f * cos_big_theta
+
+        print(f"h_1 = {h_1}, c_1={c_1}")
+        print(f"h_2 = {h_2}, c_2={c_2}")
+        print(f"h_3 = {h_3}, c_3={c_3}")
+
+        # further realization
+        # before that need to find the original values of  pair easy axes and pair magnetic moments
+        # (small_theta & big_theta, small_phi & big_Phi)
+        # by runge kutta 4th order method
+        """energy = cos_small_theta * (h_1 + c_1) * \
+                 self.f_small_theta - sin_small_theta * (h_2 + c_2) * self.small_phi - \
+                 sin_small_theta * (h_3 + c_3) * self.small_theta
+
+        print(f"Energy = {energy}")"""
