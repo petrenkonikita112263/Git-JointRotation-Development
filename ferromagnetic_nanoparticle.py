@@ -105,7 +105,7 @@ class FerromagneticNanoparticle:
 
         print(f"Values of big: theta - {self.f_big_theta}, phi - {self.f_big_phi}")
 
-    def cacl_energy(self, t):
+    def calc_energy(self, t):
         cos_small_theta = np.cos(np.deg2rad(self.small_theta))
         cos_big_theta = np.cos(np.deg2rad(self.big_theta))
         cos_small_phi = np.cos(np.deg2rad(self.small_phi))
