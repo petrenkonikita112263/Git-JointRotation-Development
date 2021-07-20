@@ -121,16 +121,6 @@ class FerromagneticNanoparticle:
 
         print(f"Values of big: theta - {self.f_big_theta}, phi - {self.f_big_phi}")
 
-    def calc_energy(self, t):
-        cos_small_theta = np.cos(np.deg2rad(self.small_theta))
-        cos_big_theta = np.cos(np.deg2rad(self.big_theta))
-        cos_small_phi = np.cos(np.deg2rad(self.small_phi))
-        sin_small_theta = np.sin(np.deg2rad(self.small_theta))
-        sin_big_theta = np.sin(np.deg2rad(self.big_theta))
-        sin_small_phi = np.cos(np.deg2rad(self.small_phi))
-
-        f = cos_small_theta * cos_big_theta + \
-            np.cos(np.deg2rad(self.small_phi - self.big_phi)) * sin_big_theta * sin_small_theta
         h_1 = self.get_hx(t) * cos_small_phi + self.get_hy(t) * sin_small_phi
         h_2 = self.get_hx(t) * sin_small_phi - self.get_hy(t) * cos_small_phi
         h_3 = self.get_hz(t)
@@ -142,6 +132,7 @@ class FerromagneticNanoparticle:
         print(f"h_2 = {h_2}, c_2={c_2}")
         print(f"h_3 = {h_3}, c_3={c_3}")
 
+    def calc_energy(self, t):
         # further realization
         # before that need to find the original values of  pair easy axes and pair magnetic moments
         # (small_theta & big_theta, small_phi & big_Phi)
