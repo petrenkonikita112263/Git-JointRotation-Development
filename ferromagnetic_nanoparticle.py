@@ -41,6 +41,8 @@ class FerromagneticNanoparticle:
         self.d_big_theta = 0.0
         self.d_big_phi = 0.0
         self.d_energy = 0.0
+        self.time = 0.0
+        self.dt = 0.0
 
     def calc_parameters(self):
         self.beta = (self.alpha * self.magnetization) / (6 * GAMMA * self.viscosity)
@@ -50,9 +52,8 @@ class FerromagneticNanoparticle:
         self.tau_2 = self.beta * self.beta_1 / self.alpha
 
     def calc_time_parameters(self):
-        time = self.print_step * self.period / self.time_step
-        dt = self.period / self.time_step
-        return time, dt
+        self.time = self.print_step * self.period / self.time_step
+        self.dt = self.period / self.time_step
 
     def get_hx(self, t):
         return self.amplitude * np.cos(np.deg2rad(self.omega * t))
