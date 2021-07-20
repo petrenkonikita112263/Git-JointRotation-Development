@@ -63,6 +63,22 @@ class FerromagneticNanoparticle:
     def get_hz(self, t):
         return self.amplitude * np.cos(np.deg2rad(self.omega * t))
 
+    def small_theta_func(self, f_1, f_2):
+        """ Returns the first ODE. """
+        return self.tau_1 * (f_1 + self.alpha_1 * f_2)
+
+    def small_phi_func(self, f_1, f_2, sin_small_theta):
+        """ Returns the second ODE. """
+        return self.tau_1 * (self.alpha_1 * f_1 - f_2) / sin_small_theta
+
+    def big_theta_func(self, w_y, cos_big_phi, w_x, sin_big_phi):
+        """ Returns the third ODE. """
+        return self.tau_2 * (w_y * cos_big_phi - w_x * sin_big_phi)
+
+    def big_phi_func(self, w_z, cos_big_theta, w_x, cos_big_phi, w_y, sin_big_phi, sin_big_theta):
+        """ Returns the fourth ODE. """
+        return self.tau_2 * (w_z - cos_big_theta * (w_x * cos_big_phi + w_y * sin_big_phi) / sin_big_theta)
+
     def calc_main_func(self, t):
         cos_small_theta = np.cos(np.deg2rad(self.small_theta))
         cos_big_theta = np.cos(np.deg2rad(self.big_theta))
@@ -83,8 +99,8 @@ class FerromagneticNanoparticle:
         f_2 = cos_small_theta * (c_1 + self.beta_1 * h_1) - \
               (f * cos_big_theta + self.beta_1 * self.get_hz(t)) * sin_small_theta
 
-        self.f_small_theta = self.tau_1 * (f_1 + self.alpha_1 * f_2)
-        self.f_small_phi = self.tau_1 * (self.alpha_1 * f_1 - f_2) / sin_small_theta
+        self.f_small_theta = self.small_theta_func(f_1, f_2)
+        self.f_small_phi = self.small_phi_func(f_1, f_2, sin_small_theta)
 
         print(f"Values of small: theta - {self.f_small_theta}, phi - {self.f_small_phi}")
 
@@ -100,8 +116,8 @@ class FerromagneticNanoparticle:
 
         print(w_x, w_y, w_z)
 
-        self.f_big_theta = self.tau_2 * (w_y * cos_big_phi - w_x * sin_big_phi)
-        self.f_big_phi = self.tau_2 * (w_z - cos_big_theta * (w_x * cos_big_phi + w_y * sin_big_phi) / sin_big_theta)
+        self.f_big_theta = self.big_theta_func(w_y, cos_big_phi, w_x, sin_big_phi)
+        self.f_big_phi = self.big_phi_func(w_z, cos_big_theta, w_x, cos_big_phi, w_y, sin_big_phi, sin_big_theta)
 
         print(f"Values of big: theta - {self.f_big_theta}, phi - {self.f_big_phi}")
 
