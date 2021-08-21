@@ -16,12 +16,3 @@ or scipy library.
 2. It will calcutalte the energy value.
 3. Find other useful parameters about ferromagnetic nanoparticle.
 3. Finally to save it into txt files.
-
-mandatory: True
-question: messenger: |
-  [QR https://www.facebook.com/nikita.petrenko.s/, 200px, Facebook]
-attachment:
-  content: |
-    Use the QR reader on your smartphone to take a picture of this:
-
-    [QR https://www.facebook.com/nikita.petrenko.s/]
